@@ -1,5 +1,6 @@
-import { useState } from 'react'
-import _ from 'lodash'
+import { useState, useEffect } from 'react'
+// import _ from 'lodash'
+import axios from 'axios'
 
 const Person = ({name, number}) => {
   return <div>{name} {number}</div>
@@ -21,27 +22,28 @@ const PersonForm = ({add, newName, setNewName, newNumber, setNewNumber}) => {
 )
 }
 
-const Persons = ({persons, search}) => persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase())).map(person => <Person key={person.name} name={person.name} number={person.number} />)
+const Persons = ({persons, search}) => persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase())).map(person => <Person key={person.id} name={person.name} number={person.number} />)
 
 const App = () => {
-  const [persons, setPersons] = useState([
-      { name: 'Arto Hellas', number: '040-123456' },
-      { name: 'Ada Lovelace', number: '39-44-5323523' },
-      { name: 'Dan Abramov', number: '12-43-234345' },
-      { name: 'Mary Poppendieck', number: '39-23-6423122'}
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [search, setSearch] = useState('')
+
+  const hook = () => {
+    axios.get("http://localhost:3001/persons").then(response => setPersons(response.data))
+  }
+  useEffect(hook, [])
 
   const add = (e) => {
     e.preventDefault()
     const newPerosn = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      id: persons.length + 1
     }
 
-    if(!persons.some(person => _.isEqual(person, newPerosn))) {
+    if(!persons.some(person => person.name.trim() === newPerosn.name.trim())) {
     setPersons(persons.concat(newPerosn))
     setNewName("")
     setNewNumber("")
