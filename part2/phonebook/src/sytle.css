@@ -1,0 +1,19 @@
+.alert {
+    font-size: 1.4rem;
+    border: green solid 4px;
+    color: green;
+    border-radius: .5rem;
+    background: rgb(202, 202, 202);
+    padding: 1rem;
+    margin: .5rem;
+}
+
+.redAlert {
+    font-size: 1.4rem;
+    border: red solid 4px;
+    color: red;
+    border-radius: .5rem;
+    background: rgb(202, 202, 202);
+    padding: 1rem;
+    margin: .5rem;
+}
