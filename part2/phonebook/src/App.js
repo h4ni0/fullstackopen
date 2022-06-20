@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import personService from './services/persons'
 
 const Person = ({person, removePerson}) => {
-  return <div>{person.name} {person.number} <button onClick={() => removePerson(person.id)}>delete</button></div>
+  return <div>{person.name} {person.number} <button onClick={() => removePerson(person._id)}>delete</button></div>
 }
 
 const Filter = ({search, setSearch}) => <div>filter shown with <input type="text" value={search} onChange={(e) => setSearch(e.target.value)}/></div> 
@@ -21,7 +21,7 @@ const PersonForm = ({add, newName, setNewName, newNumber, setNewNumber}) => {
 )
 }
 
-const Persons = ({persons, search, removePerson}) => persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase())).map(person => <Person removePerson={removePerson} key={person.id} person={person}/>)
+const Persons = ({persons, search, removePerson}) => persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase())).map(person => <Person removePerson={removePerson} key={person._id} person={person}/>)
 
 const Alert = ({ alert }) => {
   if (alert) return <div className='alert'>{alert}</div>
@@ -50,7 +50,7 @@ const App = () => {
     e.preventDefault()
     const newPerosn = {
       name: newName,
-      number: newNumber,
+      number: newNumber
     }
 
     if(!persons.some(person => person.name.trim() === newPerosn.name.trim())) {
@@ -63,7 +63,7 @@ const App = () => {
       }, 3000);
     } else {
       if (window.confirm(`${newName} is already added to phonebook, replace old number with a new one?`)) {
-        personService.update(persons.find(person => person.name.trim() === newPerosn.name.trim()).id, newPerosn).then( res =>
+        personService.update(persons.find(person => person.name.trim() === newPerosn.name.trim())._id, newPerosn).then( res =>
           setPersons(persons.map(person => person.name.trim() !== newPerosn.name.trim() ? person : res))
         ).catch(err => {
           setRedAlert("Information of " + newName + " has already been removed from server")
@@ -77,9 +77,9 @@ const App = () => {
 
 
   const removePerson = (id) => {
-    if(window.confirm(`delete ${persons.find(person => person.id === id).name}`)) personService
+    if(window.confirm(`delete ${persons.find(person => person._id === id).name}`)) personService
       .remove(id)
-      .then(setPersons(persons.filter((person) => person.id !== id)))
+      .then(setPersons(persons.filter((person) => person._id !== id)))
       .catch((err) => {
         setRedAlert(
           "This user has already been removed from server"
