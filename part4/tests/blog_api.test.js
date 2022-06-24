@@ -3,13 +3,20 @@ const supertest = require('supertest')
 const { response } = require('../../../node/app')
 const app = require('../index')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 
 const api = supertest(app)
 
 beforeEach(async () => {
     await Blog.deleteMany({})
+    await User.deleteMany({})
     await Blog.insertMany(helper.blogs)
+    const h4ni = new User({
+        username: "h4ni0",
+        password: "mypassword"
+    })
+    await h4ni.save()
 })
 
 describe('when there are some blogs', () => {
@@ -24,17 +31,19 @@ describe('when there are some blogs', () => {
     })
 
     test('blog craeted successfully', async () => {
+        const loggedIn = await api.post('/api/login').send({username: "h4ni0", password: "mypassword"})
+        const token = "bearer " + loggedIn.body.token
         const blogObj = {
             title: "a testing title",
             url: "a-testing-url",
             like: 101,
             author: "testing author"
         }
-        await api.post('/api/blogs').send(blogObj).expect(201)
+        await api.post('/api/blogs').set("Authorization", token).send(blogObj).expect(201)
         const finalBlogStatus = await helper.allBlogsInDb()
         expect(finalBlogStatus.length).toBe(helper.blogs.length + 1)
         expect(finalBlogStatus.map(blog => blog.title)).toContain(blogObj.title)
-    } )
+    }, 20000)
 })
 
 describe('when veiwing a specific blog', () => {
@@ -59,9 +68,7 @@ describe('when veiwing a specific blog', () => {
 test('delete a blog', async () => {
     const initialBlogs = await helper.allBlogsInDb()
     const id = await initialBlogs[0]._id.toString()
-    await api.delete(`/api/blogs/${id}`).expect(204)
-    const afterDeletionBlogs = await helper.allBlogsInDb()
-    expect(afterDeletionBlogs).toHaveLength(initialBlogs.length - 1)
+    await api.delete(`/api/blogs/${id}`).expect(401)
 })
 
 test('updating an existin post', async () => {

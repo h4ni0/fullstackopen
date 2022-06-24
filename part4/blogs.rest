@@ -1,0 +1,16 @@
+
+GET http://localhost:3003/api/blogs/
+
+# POST http://localhost:3003/api/blogs
+# Content-Type: application/json
+# Authorization:bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Img0bmkwIiwiaWQiOiI2MmI0ZGI2Y2E1MDEwMzZlNTM5OTExOGIiLCJpYXQiOjE2NTYwMjMyMTF9._uFaA0tZ8vkgQo5L3A_liX9xB0apSILTDpNGSzKLvqA
+
+# {
+#     "title": "Last one",
+#     "url": "token-with-user-id",
+#     "likes": 32,
+#     "author": "programmer"
+# }
+
+# DELETE http://localhost:3003/api/blogs/62b4f5fc18369706542890b0
+# Authorization:bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Img0bmkwIiwiaWQiOiI2MmI0ZGI2Y2E1MDEwMzZlNTM5OTExOGIiLCJpYXQiOjE2NTYwMjMyMTF9._uFaA0tZ8vkgQo5L3A_liX9xB0apSILTDpNGSzKLvqA
