@@ -1,4 +1,4 @@
-const {PORT, MONGODB_URI} = require('./utils/config')
+const {PORT, MONGODB_URI, NODE_ENV} = require('./utils/config')
 const express = require('express')
 const app = express()
 const blogRouter =  require('./controllers/blogs')
@@ -21,6 +21,10 @@ app.use(middleware.tokenExtractor)
 app.use('/api/blogs', blogRouter)
 app.use('/api/users', usersRouter)
 app.use('/api/login', loginRouter)
+if (NODE_ENV === 'test') {
+    const testsRouter = require("./controllers/tests")
+    app.use('/api/testing/', testsRouter)
+}
 
 app.use(middleware.errorHandler)
 app.use(middleware.unknownEndPoint)

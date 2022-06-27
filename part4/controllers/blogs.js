@@ -49,7 +49,7 @@ blogsRouter.post('/', async (req, res, next) => {
 // delete
 blogsRouter.delete('/:id', userExtractor, async (req, res, next) => { // 403 => forbidden
     try {
-        const blogToDelete = await Blog.findById(req.params.id)
+        const blogToDelete = await Blog.findOne({_id: req.params.id})
         if (!req.user._id || req.user._id.toString() !== blogToDelete.user._id.toString()) {
             return res.status(403).json({error: "access denied"})
         }
