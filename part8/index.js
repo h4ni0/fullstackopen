@@ -4,8 +4,7 @@ const mongoose = require('mongoose')
 const Book = require('./models/Book')
 const Author = require('./models/Author')
 
-const MONGODB_URI =
-    'mongodb+srv://h4ni:tsG!bbmVx5wKLJn@cluster0.il851.mongodb.net/library?retryWrites=true&w=majority'
+const MONGODB_URI = 'MONGOURL'
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
